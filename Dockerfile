@@ -6,7 +6,8 @@ ENV PUID=1000 \
     TITLE=KasmVNC-Chrome \
     LC_ALL=zh_CN.UTF-8 \
     LANG=zh_CN.UTF-8 \
-    LANGUAGE=zh_CN:zh
+    LANGUAGE=zh_CN:zh \
+    CHROME_CLI="--disable-dev-shm-usage --no-sandbox --disable-gpu"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
