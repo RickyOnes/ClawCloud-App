@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HOME=/app/xpra_user_data
 
 RUN apt-get update && apt-get install -y \
-    wget curl git gnupg ca-certificates locales \
+    wget curl gnupg ca-certificates locales \
     xvfb xauth dbus-x11 net-tools \
     xpra \
     fonts-wqy-zenhei fonts-liberation \
@@ -30,10 +30,13 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && apt-get install -y google-chrome-stable --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 https://github.com/Xpra-org/xpra-html5.git /tmp/xpra-html5 \
-    && mkdir -p /usr/share/xpra/www \
-    && cp -r /tmp/xpra-html5/html5/. /usr/share/xpra/www/ \
-    && rm -rf /tmp/xpra-html5
+RUN mkdir -p /usr/share/xpra/www \
+    && if [ ! -f /usr/share/xpra/www/index.html ] && [ ! -f /usr/share/xpra/www/connect.html ]; then \
+        curl -fsSL https://codeload.github.com/Xpra-org/xpra-html5/tar.gz/refs/heads/master -o /tmp/xpra-html5.tar.gz; \
+        tar -xzf /tmp/xpra-html5.tar.gz -C /tmp; \
+        cp -r /tmp/xpra-html5-master/html5/. /usr/share/xpra/www/; \
+        rm -rf /tmp/xpra-html5.tar.gz /tmp/xpra-html5-master; \
+    fi
 
 WORKDIR /app
 
