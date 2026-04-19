@@ -1,2 +1,1 @@
-# ClawCloud-App
-ClawCloud平台应用
+# KasmVNC Browser Image

@@ -1,4 +1,4 @@
-name: Build Xpra Browser Image
+name: Build KasmVNC Browser Image
 
 on:
   workflow_dispatch:

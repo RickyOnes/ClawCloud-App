@@ -1,4 +1,5 @@
-puppeteer_user_data/
+config/
+kasmvnc_user_data/
 *.log
 .DS_Store
 Thumbs.db
