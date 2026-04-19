@@ -1,4 +1,4 @@
-FROM lscr.io/linuxserver/webtop:chrome
+FROM lscr.io/linuxserver/chromium:kasm
 
 ENV PUID=1000 \
     PGID=1000 \
