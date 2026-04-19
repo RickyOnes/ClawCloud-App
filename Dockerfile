@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 RUN wget -O "/usr/share/keyrings/xpra.asc" https://xpra.org/xpra.asc \
     && wget -O "/etc/apt/sources.list.d/xpra.sources" https://raw.githubusercontent.com/Xpra-org/xpra/master/packaging/repos/jammy/xpra.sources \
     && apt-get update \
-    && apt-get install -y xpra xpra-x11 python3-dbus python3-pyinotify python3-xdg --no-install-recommends \
+    && apt-get install -y xpra xpra-x11 xpra-html5 python3-dbus python3-pyinotify python3-xdg --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
