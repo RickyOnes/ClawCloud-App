@@ -44,7 +44,8 @@ XPRA_ARGS=(
     --printing=no
     --webcam=no
     --dbus-launch=no
-    --start=/app/bin/launch-chrome.sh
+    --start-child=/app/bin/launch-chrome.sh
+    --exit-with-children=yes
 )
 
 if [ -n "${XPRA_EXTRA_ARGS:-}" ]; then
