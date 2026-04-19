@@ -1,0 +1,6 @@
+.git
+.github
+puppeteer_user_data
+node_modules
+npm-debug.log
+*.log
