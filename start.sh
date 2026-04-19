@@ -21,6 +21,10 @@ if ! pgrep -x dbus-daemon >/dev/null 2>&1; then
     dbus-daemon --system --fork || true
 fi
 
+if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] && ! printf '%s' "$DBUS_SESSION_BUS_ADDRESS" | grep -Eq '^(unix|tcp):'; then
+    unset DBUS_SESSION_BUS_ADDRESS
+fi
+
 if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
     eval "$(dbus-launch --sh-syntax)"
 fi
@@ -33,7 +37,7 @@ echo "起始页面: ${START_URL:-https://www.google.com/}"
 XPRA_ARGS=(
     start
     "$XPRA_DISPLAY"
-    "--bind-tcp=0.0.0.0:${XPRA_PORT}"
+    "--bind-ws=0.0.0.0:${XPRA_PORT}"
     --html=on
     --daemon=no
     --mdns=no
