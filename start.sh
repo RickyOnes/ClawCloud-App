@@ -7,8 +7,15 @@ APP_DATA_DIR="${APP_DATA_DIR:-/app/xpra_user_data}"
 export HOME="${HOME:-$APP_DATA_DIR}"
 CHROME_PROFILE_DIR="${CHROME_PROFILE_DIR:-$APP_DATA_DIR/chrome-profile}"
 
-mkdir -p "$APP_DATA_DIR" "$CHROME_PROFILE_DIR" /run/dbus
+XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export XDG_RUNTIME_DIR
+
+mkdir -p "$APP_DATA_DIR" "$CHROME_PROFILE_DIR" /run/dbus "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR" 2>/dev/null || true
 rm -f /run/dbus/pid 2>/dev/null || true
+if [ ! -s /etc/machine-id ]; then
+    dbus-uuidgen --ensure=/etc/machine-id
+fi
 
 if ! pgrep -x dbus-daemon >/dev/null 2>&1; then
     dbus-daemon --system --fork || true
@@ -37,8 +44,7 @@ XPRA_ARGS=(
     --printing=no
     --webcam=no
     --dbus-launch=no
-    --exit-with-children=no
-    --start-child=/app/bin/launch-chrome.sh
+    --start=/app/bin/launch-chrome.sh
 )
 
 if [ -n "${XPRA_EXTRA_ARGS:-}" ]; then

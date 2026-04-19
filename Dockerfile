@@ -9,9 +9,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HOME=/app/xpra_user_data
 
 RUN apt-get update && apt-get install -y \
-    wget curl gnupg ca-certificates locales \
+    wget curl gnupg ca-certificates locales apt-transport-https software-properties-common \
     xvfb xauth dbus-x11 net-tools \
-    xpra \
     fonts-wqy-zenhei fonts-liberation \
     libasound2 libatk-bridge2.0-0 libatk1.0-0 \
     libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
@@ -24,19 +23,17 @@ RUN apt-get update && apt-get install -y \
     && locale-gen zh_CN.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN wget -O "/usr/share/keyrings/xpra.asc" https://xpra.org/xpra.asc \
+    && wget -O "/etc/apt/sources.list.d/xpra.sources" https://raw.githubusercontent.com/Xpra-org/xpra/master/packaging/repos/jammy/xpra.sources \
+    && apt-get update \
+    && apt-get install -y xpra python3-dbus python3-pyinotify python3-xdg --no-install-recommends \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
     && apt-get update \
     && apt-get install -y google-chrome-stable --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /usr/share/xpra/www \
-    && if [ ! -f /usr/share/xpra/www/index.html ] && [ ! -f /usr/share/xpra/www/connect.html ]; then \
-        curl -fsSL https://codeload.github.com/Xpra-org/xpra-html5/tar.gz/refs/heads/master -o /tmp/xpra-html5.tar.gz; \
-        tar -xzf /tmp/xpra-html5.tar.gz -C /tmp; \
-        cp -r /tmp/xpra-html5-master/html5/. /usr/share/xpra/www/; \
-        rm -rf /tmp/xpra-html5.tar.gz /tmp/xpra-html5-master; \
-    fi
 
 WORKDIR /app
 
